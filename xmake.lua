@@ -55,7 +55,7 @@ target("st")
             "cp -f " .. target:targetfile() .. " " .. PREFIX .. "/bin",
             "chmod 755 " .. PREFIX .. "/bin/" .. target:name(),
             "mkdir -p " .. MANPREFIX .. "/man1",
-            "sed 's/VERSION/" .. VERSION .. "/g' < st.1 >" .. MANPREFIX.."/man1/" .. target:name() .. ".1",
+            "sed 's/VERSION/" .. VERSION .. "/g' < " .. target:name() .. ".1 >" .. MANPREFIX.."/man1/" .. target:name() .. ".1",
             "chmod 644 " .. MANPREFIX .. "/man1/" .. target:name() .. ".1",
             "tic -sx " .. target:name() .. ".info"
         }
@@ -72,15 +72,15 @@ target("st")
 
     after_package(function (target)
         local cmds = {
-            "mkdir -p st-" .. VERSION,
-            "cp -R `ls | grep -v -f .gitignore` st-" .. VERSION,
-            "tar -cf - st-" .. VERSION .. " | gzip > st-" .. VERSION .. ".tar.gz",
-            "rm -rf st-" .. VERSION
+            "mkdir -p " .. target:name() .. "-" .. VERSION,
+            "cp -R `ls | grep -v -f .gitignore` " .. target:name() .. "-" .. VERSION,
+            "tar -cf - " .. target:name() .. "-" .. VERSION .. " | gzip > " .. target:name() .. "-" .. VERSION .. ".tar.gz",
+            "rm -rf " .. target:name() .. "-" .. VERSION
         }
         shell(os, cmds)
     end)
 
     on_clean(function (target)
-        local cmds = "rm -rf build .xmake st-" .. VERSION ..".tar.gz"
+        local cmds = "rm -rf build .xmake " .. target:name() .. "-" .. VERSION ..".tar.gz"
         shell(os, cmds)
     end)
